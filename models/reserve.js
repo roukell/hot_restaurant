@@ -6,7 +6,6 @@ const reservation = new Schema({
     phone: String,
     email: String,
     id: String
-
 });
 
 const Reservation = mongoose.model("reservation", reservation);

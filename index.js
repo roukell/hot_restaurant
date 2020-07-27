@@ -5,6 +5,7 @@ const app = new express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const Reservation = require("./models/reserve");
+const { writeFile } = require("fs");
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
@@ -24,20 +25,28 @@ app.get("/reserve", (req, res) => {
     res.render("reserve")
 })
 
-app.get("/tables", (req, res) => {
-    res.render("tables")
+app.get("/tables", async (req, res) => {
+    const reservations = await Reservation.find({});
+    res.render("tables", {
+        reservations
+    })
 })
 
 app.post("/posts/store", async (req, res) => {
     await Reservation.create(req.body);
-    res.redirect("/tables"); 
+    res.redirect("/"); 
     })
 
-app.get("/tableLink", async (req, res) => {
-    const reservation = await Reservation.find({});
-        res.render("tableLink", {
-            reservation
-        });
+// app.get("/table.json", async (req, res) => {
+//     const reservations = await Reservation.find({});
+//         res.render("index", {
+//             reservations
+//         });
+// })
+
+Reservation.find({}, (error, reservations) => {
+    console.log(error, reservations)
+
 })
 
 app.listen(3000, () =>{
